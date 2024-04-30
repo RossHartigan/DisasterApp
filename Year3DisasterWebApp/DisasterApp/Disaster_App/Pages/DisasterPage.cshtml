@@ -1,0 +1,40 @@
+﻿@page
+@model Disaster_App.Pages.DisasterPageModel
+@{
+}
+
+<!Doctype html>
+<html>
+    <head>
+        <body>
+            <h2 style="color: orange">Add Disaster</h2>
+
+            <br/>
+
+            <form method="post" asp-page-handler="CaptureDisaster" id="disaster">
+                <div class="form-group">
+                    <label for="startDate">Start Date:</label>
+                    <input type="text" class="form-control" id="startDate" name="startDate" />
+                </div>
+                <div class="form-group">
+                    <label for="endDate">End Date :</label>
+                    <input type="text" class="form-control" id="endDate" name="endDate" />
+                </div>
+                <div class="form-group">
+                    <label for="disasterDescription">Disaster Description:</label>
+                    <input type="text" class="form-control" id="disasterDescription" name="disasterDescription" />
+                </div>
+                <div class="form-group">
+                    <label for="disasterLocation">Disaster Location:</label>
+                    <input type="text" class="form-control" id="disasterLocation" name="disasterLocation" />
+                </div>
+                <div class="form-group">
+                    <label for="aid">Disaster Aid :</label>
+                    <input type="text" class="form-control" id="aid" name="aid" />
+                </div>
+                <br />
+                <button style="background-color: mediumpurple; border: none; box-shadow: none" type="submit" class="btn btn-primary">Add Disaster</button>
+            </form>
+        </body>
+    </head>
+</html>

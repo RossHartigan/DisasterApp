@@ -1,0 +1,240 @@
+﻿@page
+@model Disaster_App.Pages.AllocationPageModel
+@using Disaster_App.Models
+@inject Disaster_App.Services.DisasterService DisasterService
+@inject Disaster_App.Data.DisasterContext DbContext
+@{
+    ViewData["Title"] = "Allocation Page";
+
+    int getTotalMoney()
+    {
+        int totalMoney = DisasterService.GetTotalDonationAmount() - DisasterService.GetTotalAllocationAmount();
+        return totalMoney;
+    }
+ }
+
+<div class="text-center">
+    <h1 style="color: orange; background-color: black" class="display-4">Allocations Page</h1>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <br />
+            <h2 style="color: orange">Allocate Donation</h2>
+            <br />
+
+            <form method="post" asp-page-handler="CaptureMoneyAllocation" id="moneyAllocation" onsubmit="CaptureMoneyAllocation(event)">
+                <div class="form-group">
+                    <label for="disaster">Disaster :</label>
+                    <select class="form-control" id="disasterSelect" name="disasterSelect">
+                        <option value=""></option>
+                        @foreach (var disaster in DisasterService.GetDisasters())
+                        {
+                            <option value="@disaster.DisasterDescription">@disaster.DisasterDescription</option>
+                        }
+                    </select>
+
+                </div>
+
+                <br />
+
+                <label for="totalDonationAmount">Total Money Available For Allocation : R </label>
+                <span id="totalDonationAmount">
+                    @getTotalMoney().ToString()
+                </span>
+
+
+                <br />
+                <br />
+
+                <div class="form-group">
+                    <label for="allocationAmount">Allocation Amount:</label>
+                    <input type="number" class="form-control" id="allocationAmount" name="allocationAmount" />
+                </div>
+
+                <div id="error-message" style="color: red;"></div>
+
+                <br />
+                <button style="background-color: mediumpurple; border: none; box-shadow: none" type="submit" class="btn btn-primary">Allocate Money</button>
+            </form>
+
+            <br />
+            <h2 style="color: orange">Allocate Goods</h2>
+            <br />
+
+            <form method="post" asp-page-handler="CaptureGoodsAllocation" id="goodsAllocation" onsubmit="CaptureGoodsAllocation">
+                <div class="form-group">
+                    <label for="disasterSelect">Disaster :</label>
+                    <select class="form-control" id="disasterSelect" name="disasterSelect">
+                        <option value=""></option>
+                        @foreach (var disaster in DisasterService.GetDisasters())
+                        {
+                            <option value="@disaster.DisasterDescription">@disaster.DisasterDescription</option>
+                        }
+                    </select>
+                </div>
+
+                <br />
+
+                <div class="form-group">
+                    <label for="goodSelect">Goods :</label>
+                    <select class="form-control" id="goodSelect" name="goodSelect">
+                        <option value=""></option>
+                        @foreach (var good in DisasterService.GetGoods())
+                        {
+                            <option value="@good.ItemDescription">@good.ItemDescription</option>
+                        }
+                    </select>
+                </div>
+
+                <br />
+                <br />
+                <button style="background-color: mediumpurple; border: none; box-shadow: none" type="submit" class="btn btn-primary">Allocate Goods</button>
+            </form>
+
+            <br />
+            <h2 style="color: orange">Purchase Goods</h2>
+
+            <br />
+
+            <form method="post" asp-page-handler="PurchaseGoods" id="purchaseGoods" onsubmit="purchaseGoods">
+                <div class="form-group">
+                    <label for="date">Purchase Price:</label>
+                    <input type="text" class="form-control" id="goodsPrice" name="goodsPrice" />
+                </div>
+                <div class="form-group">
+                    <label for="date">Purchase Date:</label>
+                    <input type="text" class="form-control" id="goodsDate" name="goodsDate" />
+                </div>
+                <div class="form-group">
+                    <label for="goodsAmount">Number Of Items Purchased:</label>
+                    <input type="text" class="form-control" id="goodsAmount" name="goodsAmount" />
+                </div>
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select class="form-control" id="categorySelect" name="category">
+                        <option value="Clothes">Clothing</option>
+                        <option value="Non-perishable Foods">Non-perishable Foods</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="itemDescription">Item Description:</label>
+                    <input type="text" class="form-control" id="itemDescription" name="itemDescription" />
+                </div>
+                <div class="form-group">
+                    <label for="disasterSelect">Disaster Allocation :</label>
+                    <select class="form-control" id="disasterAllocation" name="disasterAllocation">
+                        <option value=""></option>
+                        @foreach (var disaster in DisasterService.GetDisasters())
+                        {
+                            <option value="@disaster.DisasterDescription">@disaster.DisasterDescription</option>
+                        }
+                    </select>
+                </div>
+                <br />
+                <button style="background-color: mediumpurple; border: none; box-shadow: none" type="submit" class="btn btn-primary">Purchase Goods</button>
+            </form>
+
+            <br/>
+
+            <h2 style="color: orange">Add Category</h2>
+            <br />
+
+            <form method="post" asp-page-handler="AddCategory" id="category">
+                <div class="form-group">
+                    <label for="newCategory">Add Category:</label>
+                    <input type="text" class="form-control" id="newCategory" name="newCategory" />
+                </div>
+                <br />
+                <button style="background-color: mediumpurple; border: none; box-shadow: none;" type="button" class="btn btn-primary" onclick="addCategory()">Add Category</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function addCategory() {
+        var newCategory = $("#newCategory").val();
+
+        if (newCategory) {
+            var option = $("<option>").val(newCategory).text(newCategory);
+
+            $("#categorySelect").append(option);
+
+            $("#newCategory").val('');
+        }
+    }
+
+    function PurchaseGoods() {
+        var formData = {
+            goodsDate: $("#goodsDate").val(),
+            goodsAmount: $("#goodsAmount").val(),
+            category: $("#category").val(),
+            itemDescription: $("#itemDescription").val(),
+            disasterAllocation: $("#disasterAllocation").val(),
+            goodsPrice: $("#goodsPrice").val()
+        };
+
+        $.ajax({
+            url: "/DonationPage",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                // Handle success response
+                console.log("Data sent successfully");
+            },
+            error: function (error) {
+                // Handle error response
+                console.error("Error sending data", error);
+            }
+        });
+
+        console.log(formData.id);
+        console.log(formData);
+    }
+
+    function CaptureMoneyAllocation(event) {
+        var allocationAmount = parseFloat($("#allocationAmount").val());
+
+        if (allocationAmount <= @DisasterService.GetTotalDonationAmount() - @DisasterService.GetTotalAllocationAmount()) 
+        {
+            return true;
+        } else {
+            
+            console.error("Too much allocation");
+            $("#error-message").text("Allocation amount exceeds the total donation amount");
+            event.preventDefault();
+            return false;
+        }
+    }
+
+    function CaptureGoodsAllocation()
+    {
+        var formData =
+        {
+            goodSelect: $("#goodSelect").val(),
+            disasterSelect: $("#disasterSelect").val()
+        };
+
+        console.log("formData:", formData);
+
+        $.ajax({
+            url: "/AllocationPage",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                // Handle success response
+                console.log("Data sent successfully");
+            },
+            error: function (error) {
+                // Handle error response
+                console.error("Error sending data", error);
+            }
+        });
+    }
+</script>
+
+

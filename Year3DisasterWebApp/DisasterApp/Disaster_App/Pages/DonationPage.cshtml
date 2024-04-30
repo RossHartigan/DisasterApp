@@ -1,0 +1,190 @@
+﻿@page "/DonationPage"
+@model Disaster_App.Pages.DonationPageModel
+@{
+    ViewData["Title"] = "Donation Page";
+}
+
+<div class="text-center">
+    <h1 style="color: orange; background-color: black" class="display-4">Donations Page</h1>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <br/>
+            <h2 style="color: orange">Add Category</h2>
+            <br/>
+
+            <form method="post" asp-page-handler="AddCategory" id="category">
+                <div class="form-group">
+                    <label for="newCategory">Add Category:</label>
+                    <input type="text" class="form-control" id="newCategory" name="newCategory" />
+                </div>
+                <br/>
+                <button style="background-color: mediumpurple; border: none; box-shadow: none;" type="button" class="btn btn-primary" onclick="addCategory()">Add Category</button>
+            </form>
+
+            <br/>
+            <h2 style="color: orange">Monetary Donation</h2>
+            <br />
+
+            <form method="post" asp-page-handler="CaptureMonetaryDonation" id="money">
+                <div class="form-group">
+                    <label for="moneyDate">Donation Date:</label>
+                    <input type="text" class="form-control" id="moneyDate" name="moneyDate" />
+                </div>
+                <div class="form-group">
+                    <label for="moneyAmount">Donation Amount:</label>
+                    <input type="text" class="form-control" id="moneyAmount" name="moneyAmount" />
+                </div>
+                <div class="form-group">
+                    <label for="name">Donar Name:</label>
+                    <input type="text" class="form-control" id="name" name="name" />
+                    <label>Leave blank for anonymous donation</label>
+                </div>
+                <br/>
+                <button style="background-color: mediumpurple; border: none; box-shadow: none;" type="submit" class="btn btn-primary">Donate Money</button>
+            </form>
+
+            <br/>
+
+            <h2 style="color: orange">Goods Donation</h2>
+
+            <br/>
+
+            <form method="post" asp-page-handler="CaptureGoodsDonation" id="goods">
+                <div class="form-group">
+                    <label for="date">Donation Date:</label>
+                    <input type="text" class="form-control" id="goodsDate" name="goodsDate" />
+                </div>
+                <div class="form-group">
+                    <label for="goodsAmount">Number Of Items:</label>
+                    <input type="text" class="form-control" id="goodsAmount" name="goodsAmount" />
+                </div>
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select class="form-control" id="categorySelect" name="category">
+                        <option value="Clothes">Clothing</option>
+                        <option value="Non-perishable Foods">Non-perishable Foods</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="donorName">Donor Name:</label>
+                    <input type="text" class="form-control" id="donorName" name="donorName" />
+                    <label>Leave blank for anonymous donation</label>
+                </div>
+                <div class="form-group">
+                    <label for="itemDescription">Item Description:</label>
+                    <input type="text" class="form-control" id="itemDescription" name="itemDescription" />
+                </div>
+                <br />
+                <button style="background-color: mediumpurple; border: none; box-shadow: none" type="submit" class="btn btn-primary">Donate Goods</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function addCategory() 
+    {        
+        var newCategory = $("#newCategory").val();
+
+        if (newCategory) 
+        {
+            var option = $("<option>").val(newCategory).text(newCategory);
+
+            $("#categorySelect").append(option);
+
+            $("#newCategory").val('');
+        }
+    }
+
+
+    function captureMonetaryDonation() {
+        var formData = 
+        {
+            moneyDate: $("#moneyDate").val(),
+            moneyAmount: $("#moneyAmount").val(),
+            name: $("#name").val(),
+            id: "money"
+        };
+
+        console.log("formData:", formData);
+
+        $.ajax({
+            url: "/DonationPage",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                // Handle success response
+                console.log("Data sent successfully");
+            },
+            error: function (error) {
+                // Handle error response
+                console.error("Error sending data", error);
+            }
+        });
+
+        console.log(formData.id);
+    }
+
+
+    function captureGoodsDonation() {
+        var formData = {
+            goodsDate: $("#goodsDate").val(),
+            goodsAmount: $("#goodsAmount").val(),
+            category: $("#category").val(),
+            itemDescription: $("#itemDescription").val(),
+            donarName: $("#donarName").val(),
+            id: "goods"
+        };
+
+        $.ajax({
+            url: "/DonationPage",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                // Handle success response 
+                console.log("Data sent successfully");
+            },
+            error: function (error) {
+                // Handle error response
+                console.error("Error sending data", error);
+            }
+        });
+
+        console.log(formData.id);
+        console.log(formData);
+    }
+
+    function captureDisaster() {
+        var formData = {
+            startDate: $("#startDate").val(),
+            endDate: $("#endDate").val(),
+            disasterDescription: $("#disasterDescription").val(),
+            disasterLocation: $("#disasterLocation").val(),
+            aid: $("#aid").val(),
+            id: "disaster"
+        };
+
+        $.ajax({
+            url: "/DonationPage",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                // Handle success response
+                console.log("Data sent successfully");
+            },
+            error: function (error) {
+                // Handle error response
+                console.error("Error sending data", error);
+            }
+        });
+
+        console.log(formData.id);
+        console.log(formData);
+    }
+
+
+</script>

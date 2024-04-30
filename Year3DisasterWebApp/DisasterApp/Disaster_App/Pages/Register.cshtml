@@ -1,0 +1,70 @@
+﻿@page "/Register"
+
+@model Disaster_App.Pages.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="text-center">
+    <h1 style="color: orange; background-color: black" class="display-4">Register</h1>
+</div>
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" asp-page="Register">
+                <div class="form-group">
+                    <label for="username">Username :</label>
+                    <input type="text" class="form-control" id="username" name="username"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password :</label>
+                    <input type="password" class="form-control" id="password" name="password"/>
+                </div>
+                <div class="form-group">
+                    <label for="name">Name :</label>
+                    <input type="text" class="form-control" id="name" name="name" />
+                </div>
+                <div class="form-group">
+                    <label for="surname">Surname :</label>
+                    <input type="text" class="form-control" id="surname" name="surname" />
+                </div>
+                <div class="form-group">
+                    <label for="email">E-Mail :</label>
+                    <input type="text" class="form-control" id="email" name="email" />
+                </div>
+                <br/>
+                <button style="background-color: mediumpurple; border: none; box-shadow: none" type="submit" class="btn btn-primary" onclick="captureUserInput()">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function captureUserInput() 
+    {
+        var formData = {
+            username: $("#username").val(),
+            password: $("#password").val(),
+            name: $("#name").val(),
+            surname: $("#surname").val(),
+            email: $("#email").val()
+        };
+
+        $.ajax({
+            url: "/Register",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                // Handle success response
+                console.log("Data sent successfully");
+            },
+            error: function (error) {
+                // Handle error response
+                console.error("Error sending data");
+            }
+        });
+    }
+</script>
+

@@ -1,0 +1,81 @@
+﻿@page "/HomePage"
+@model Disaster_App.Pages.Home_PageModel
+@{
+
+    <div class="text-center">
+        <h1 style="color: orange; background-color: black" class="display-4">Home Page</h1>
+        <br><br>
+        <br><br>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="text-box">
+                    <h4>Monetary Donations :</h4>
+                    @foreach (var donation in Model.MoneyDonations)
+                    {
+                        <div>
+                            Donor Name: @donation.DonarName
+                        </div>
+                        <div>
+                            Donation Date: @donation.DonationDate
+                        </div>
+                        <div>
+                            Donation Amount: R  @donation.DonationAmount
+                        </div>
+                        <br/>
+                    }
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-box">
+                    <h4>Goods Donations :</h4>
+                    @foreach (var good in Model.GoodsDonations)
+                    {
+                        <div>
+                            Category: @good.Category
+                        </div>
+                        <div>
+                            Donation Date: @good.DonationDate
+                        </div>
+                        <div>
+                            Number Of Items: @good.NumberOfItems.ToString()
+                        </div>
+                        <div>
+                            Item Description: @good.ItemDescription
+                        </div>
+                        <div>
+                            Donar name: @good.DonarName
+                        </div>
+                        <br />
+                    }
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-box">
+                    <h4>Disasters :</h4>
+                    @foreach (var disaster in Model.Disaster)
+                    {
+                        <div>
+                            StartDate: @disaster.StartDate
+                        </div>
+                        <div>
+                            End Date: @disaster.EndDate
+                        </div>
+                        <div>
+                            Description: @disaster.DisasterDescription
+                        </div>
+                        <div>
+                            Location: @disaster.DisasterLocation
+                        </div>
+                        <div>
+                            Aid: @disaster.Aid
+                        </div>
+                        <br />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,63 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Disaster App";
+}
+
+<div class="text-center">
+    <h1 style="color: orange; background-color: black" class="display-4">Log In</h1>
+    <br><br>
+    <br><br>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" asp-page="/Login">
+                <div class="form-group">
+                    <label for="username">Username :</label>
+                    <input type="text" class="form-control" id="username" name="username" />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password :</label>
+                    <input type="password" class="form-control" id="password" name="password" />
+                </div>
+                <br />
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button style="background-color: mediumpurple; border: none; box-shadow: none" type="submit" class="btn btn-success btn-block">Login</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function captureInput() 
+    {
+        var formData = {
+            username: $("#username").val(),
+            password: $("#password").val()
+        };
+
+        $.ajax({
+            url: "/Index",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                // Handle success response
+                console.log("Data sent successfully");
+            },
+            error: function (error) {
+                // Handle error response
+                console.error("Error sending data");
+            }
+        });
+        
+    }
+</script>
+

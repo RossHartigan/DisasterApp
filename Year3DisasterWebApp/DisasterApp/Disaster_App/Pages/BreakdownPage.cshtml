@@ -1,0 +1,156 @@
+﻿@page
+@model Disaster_App.Pages.BreakdownPageModel
+@{
+}
+
+<!Doctype html>
+<html>
+<head>
+    <title>Breakdown Page</title>
+        <style>
+
+            .allocation {
+                margin: 20px 0;
+                padding: 20px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+             background-color: #000000;
+            }
+            .allocation h2{
+                color: orange; 
+                font-size:3rem;
+            }
+
+            .allocation h3 {
+                color: mediumpurple;
+                font-size: 1rem;
+            }
+            .allocation p {
+                color: white;
+            }
+
+            .disaster{
+                margin: 20px 0;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                background-color: #000000;
+            }
+
+            .donations{
+                margin: 20px 0;
+                padding: 20px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                background-color: #000000;
+            }
+
+            .donations h2 {
+                color: orange;
+                font-size: 3rem;
+            }
+
+            .donations p {
+                color: white;
+            }
+
+
+        </style>
+
+    <body>
+
+        <div class="text-center">
+            <h1 style="color: orange; background-color: black" class="display-4">Breakdown Page</h1>
+            <br/>
+            <br/>
+        </div>
+
+        <br/>
+        <br/>
+
+        <div class="donations">
+            <h2 style="color: orange">Total Donations :</h2>
+
+            @if (Model.money != null && Model.money.Any())
+            {
+                decimal totalDonationAmount = 0;
+
+                @foreach (var x in Model.money)
+                {
+                    totalDonationAmount += x.DonationAmount;
+                }
+
+                <p>Total Monetary : R @totalDonationAmount</p>
+            }
+            else
+            {
+                <p>No Monetary Donations Available.</p>
+            }
+        
+
+            @if (Model.goods != null && Model.goods.Any())
+            {
+                decimal totalGoods = 0;
+
+                @foreach (var x in Model.goods)
+                {
+                    totalGoods += x.NumberOfItems;
+                }
+
+                <p>Total Number Of Goods : @totalGoods</p>
+            }
+            else
+            {
+                <p>No Goods Donations Available.</p>
+            }
+        </div>
+        <div class="allocation">
+            @if (Model.allocations != null && Model.allocations.Any())
+            {
+                <h2>Active Disasters</h2>
+                <br />
+
+                @foreach (var x in Model.disasters)
+                {
+                    string disasterName = x.DisasterDescription;
+                    DateOnly endDate = DateOnly.Parse(x.EndDate);
+                    DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);                   
+
+                    @if (endDate > currentDate)
+                    {                        
+                        <h2>@x.DisasterDescription</h2>
+                        <br/>
+                        <h3>Start Date : @x.StartDate</h3>
+                        <h3>End Date : @x.EndDate</h3>
+                        <br/>
+
+                        @foreach (var y in Model.allocations)
+                        {
+                            if (y.AllocatedDisaster == @disasterName)
+                            {
+                                <div class="disaster">
+                                    <p>Allocation Type: @y.AllocationType</p>
+                                    @if (y.AllocationAmount == 0)
+                                    {
+                                        <p>Allocated Goods: @y.AllocationGood</p>
+                                    }
+                                    else
+                                    {
+                                        <p>Allocated Money: R @y.AllocationAmount</p>
+                                    }
+                                </div>
+                            }
+                        }
+                    }
+                }
+                <br />
+            }
+            else
+            {
+                <p>No Disaster Allocations Available.</p>
+            }
+        </div>
+
+    </body>
+</head>
+</html>

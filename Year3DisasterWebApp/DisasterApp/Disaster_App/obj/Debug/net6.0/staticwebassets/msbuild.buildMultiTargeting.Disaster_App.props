@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Disaster_App.props" />
+</Project>
